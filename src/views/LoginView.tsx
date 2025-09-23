@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 export default function LoginView() {
   return (
-    <div className="bg-green-50 shadow-lg rounded-lg">
+    <div className="bg-green-50 shadow-lg rounded-lg font-ubuntu">
       <h2 className="text-center text-green-800 font-bold text-2xl pt-8">Truck App</h2>
       <h4 className="text-center  text-lg">Ingresa tú cuenta para iniciar</h4>
       <form className="bg-green-50 px-5 py-10 rounded-lg space-y-5">
@@ -10,7 +10,7 @@ export default function LoginView() {
         <input  id="email"
             type="email"
             placeholder="tuemail@correo.com"
-            className="bg-white border-none p-1.5 rounded-lg placeholder-slate-400 ml-2"
+            className="bg-white border-none p-2 rounded-lg placeholder-slate-400 ml-2"
             >
 
             </input>
@@ -20,7 +20,7 @@ export default function LoginView() {
         <input  id="password"
             type="password"
             placeholder="*******"
-            className="bg-white border-none p-1.5 rounded-lg placeholder-slate-400 ml-2"
+            className="bg-white border-none p-2 rounded-lg placeholder-slate-400 ml-2"
             >
 
             </input>
