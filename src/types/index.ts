@@ -12,3 +12,4 @@ export type RegisterForm = Pick <Admin ,'nombre'| 'apellido' |'correo'> & {
 export type LoginForm =Pick <Admin , 'correo' > & {
     password:string
 }
+
