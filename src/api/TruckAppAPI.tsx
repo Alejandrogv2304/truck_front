@@ -6,7 +6,7 @@ import type {  Admin } from "../types";
 export async function getUser(){
     
      try{
-      const {data} = await api<Admin>('/user');
+      const {data} = await api<Admin>('/api/v1/auth/me');
       return data
        
     }catch(error){

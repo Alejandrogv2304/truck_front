@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../api/TruckAppAPI";
-import DevTree from "../components/DevTree";
+
 
 export default function AppLayout() {
 
@@ -18,7 +18,7 @@ export default function AppLayout() {
     return <Navigate to={'/auth/login'}/>
    }
     console.log( data)
-    if(data) return (
-        <DevTree data={data}/>
-    )
+    // if(data) return (
+    //     // <DevTree data={data}/>
+    // )
 }
