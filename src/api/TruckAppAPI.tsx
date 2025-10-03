@@ -3,7 +3,7 @@ import api from "../config/axios"
 import type {  Admin } from "../types";
 
 
-export async function getUser(){
+export async function getAdmin(){
     
      try{
       const {data} = await api<Admin>('/api/v1/auth/me');

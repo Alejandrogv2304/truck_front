@@ -1,14 +1,18 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "../api/TruckAppAPI";
+import { getAdmin } from "../api/TruckAppAPI";
+import { useState } from "react";
+import SideBar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 
 
 export default function AppLayout() {
 
+    const [sidebarToggle, setSidebarToggle] = useState(true);
 
     const {data , isError, isLoading} = useQuery({
-        queryFn: getUser,
-        queryKey: ['user'],
+        queryFn: getAdmin,
+        queryKey: ['admin'],
         retry: 1,
         refetchOnWindowFocus:false
     })
@@ -17,8 +21,15 @@ export default function AppLayout() {
    if(isError){
     return <Navigate to={'/auth/login'}/>
    }
-    console.log( data)
-    // if(data) return (
-    //     // <DevTree data={data}/>
-    // )
+    
+      if(data) return (
+        <>
+      <SideBar sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle} />
+      {/* El div principal ahora tiene margen izquierdo dinámico */}
+      <div className={`transition-all duration-300 ${sidebarToggle ? "ml-64" : "ml-0"} `}>
+        <Navbar sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle} />
+        <Outlet />
+      </div>
+      </>
+      )
 }
