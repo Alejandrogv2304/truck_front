@@ -52,7 +52,7 @@ export default function SideBar({ sidebarToggle, setSidebarToggle }:SideBarProps
           </Link>
         </li>
         <li className={`mb-2 rounded hover:shadow py-2 ${COLORS["hover"]}`}>
-          <Link to="" className="px-3 w-full flex items-center">
+          <Link to="/admin/camiones" className="px-3 w-full flex items-center">
             <CiDeliveryTruck className="h-6 w-6 inline-block mr-2 -mt-2" /> Camiones
           </Link>
         </li>

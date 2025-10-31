@@ -4,6 +4,7 @@ import LoginView from "./views/LoginView";
 import RegisterView from "./views/RegisterView";
 import AppLayout from "./layouts/AppLayout";
 import DashboardView from "./views/DashboardView";
+import CamionView from "./views/CamionView";
 
 function Router() {
   
@@ -19,6 +20,8 @@ function Router() {
 
         <Route element={<AppLayout/>}>
            <Route path="/admin/dashboard" element={<DashboardView/>}/>
+           <Route path="/admin/camiones" element={<CamionView/>}/>
+
         </Route>
     </Routes>
     </BrowserRouter>
