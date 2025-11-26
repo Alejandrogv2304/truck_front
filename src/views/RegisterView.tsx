@@ -31,7 +31,7 @@ export default function RegisterView() {
   const handleRegister = async (formData: RegisterForm) => {
     try {
       const { data } = await api.post(`/api/v1/admin`, formData);
-      console.log(data);
+      // console.log(data);
       toast.success(data.message || 'Registro Exitoso');
       reset();
     } catch (error) {

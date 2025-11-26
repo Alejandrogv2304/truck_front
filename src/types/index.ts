@@ -13,3 +13,9 @@ export type LoginForm =Pick <Admin , 'correo' > & {
     password:string
 }
 
+export type Camion ={
+    placa:string
+    modelo:string
+    estado:string
+}
+

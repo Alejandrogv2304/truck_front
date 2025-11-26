@@ -4,6 +4,7 @@ import { getAdmin } from "../api/TruckAppAPI";
 import { useState } from "react";
 import SideBar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import { Toaster } from "sonner";
 
 
 export default function AppLayout() {
@@ -24,6 +25,7 @@ export default function AppLayout() {
     
       if(data) return (
         <>
+      <Toaster richColors position="top-right" />
       <SideBar sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle} />
       {/* El div principal ahora tiene margen izquierdo dinámico */}
       <div className={`transition-all duration-300 ${sidebarToggle ? "ml-64" : "ml-0"} `}>
