@@ -25,6 +25,7 @@ function Router() {
             <Route path="/admin/dashboard" element={<DashboardView/>}/>
             <Route path="/admin/camiones" element={<CamionView/>}/>
             <Route path="/admin/camiones/agregar" element={<AddCamionView/>}/>
+            <Route path="/admin/camiones/editar/:id" element={<AddCamionView/>}/>
           </Route>
         </Route>
     </Routes>

@@ -19,3 +19,9 @@ export type Camion ={
     estado:string
 }
 
+export type CamionCardProps = Pick <Camion ,'placa'| 'modelo' |'estado'> & {
+    id_camion:number
+    onDelete: (id: number) => void
+    onEdit: (id: number) => void
+}
+

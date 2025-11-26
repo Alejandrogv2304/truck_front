@@ -1,14 +1,19 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import ErrorMessage from "../components/ErrorMessage";
 import type { Camion } from "../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
-import { createCamion } from "../api/TruckAppAPI";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createCamion, getCamionById, updateCamion } from "../api/TruckAppAPI";
+import { useEffect } from "react";
 
 export default function AddCamionView() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const { id } = useParams<{ id: string }>();
+    
+    const isEditMode = Boolean(id);
 
     const initialValues: Camion = {
         placa: "",
@@ -23,8 +28,26 @@ export default function AddCamionView() {
           formState: { errors },
         } = useForm<Camion>({ defaultValues: initialValues });
 
-    // Mutation con React Query
-    const { mutate } = useMutation({
+    // Query para obtener datos del camión si estamos en modo edición
+    const { data: camionData } = useQuery({
+      queryKey: ['camion', id],
+      queryFn: () => getCamionById(Number(id)),
+      enabled: isEditMode, // Solo ejecuta si hay un id
+    });
+
+    // Cargar datos en el formulario cuando se obtienen
+    useEffect(() => {
+      if (camionData) {
+        reset({
+          placa: camionData.placa,
+          modelo: camionData.modelo,
+          estado: camionData.estado,
+        });
+      }
+    }, [camionData, reset]);
+
+    // Mutation para crear
+    const createMutation = useMutation({
       mutationFn: createCamion,
       onError: (error) => {
         toast.error(error.message || 'Error al agregar el camión');
@@ -32,13 +55,31 @@ export default function AddCamionView() {
       onSuccess: (data) => {
         toast.success(data?.message || 'Camión agregado exitosamente');
         reset();
-        // setTimeout(() => navigate('/admin/camiones') , 2000);
-        // navigate('/admin/camiones')
+        queryClient.invalidateQueries({ queryKey: ['camiones'] });
+        setTimeout(() => navigate('/admin/camiones'), 1500);
+      }
+    });
+
+    // Mutation para actualizar
+    const updateMutation = useMutation({
+      mutationFn: updateCamion,
+      onError: (error) => {
+        toast.error(error.message || 'Error al actualizar el camión');
+      },
+      onSuccess: (data) => {
+        toast.success(data?.message || 'Camión actualizado exitosamente');
+        queryClient.invalidateQueries({ queryKey: ['camiones'] });
+        queryClient.invalidateQueries({ queryKey: ['camion', id] });
+        setTimeout(() => navigate('/admin/camiones'), 1500);
       }
     });
 
     const handleAddCamion = (formData: Camion) => {
-      mutate(formData);
+      if (isEditMode) {
+        updateMutation.mutate({ id: Number(id), formData });
+      } else {
+        createMutation.mutate(formData);
+      }
     };
   return (
     <>
@@ -48,8 +89,12 @@ export default function AddCamionView() {
             <FaArrowLeft className="h-6 w-6" /> 
           </Link>
           <div className="font-ubuntu">
-        <h1 className="text-3xl font-bold text-green-800">Agregar Camión</h1>
-        <h2 className="text-lg text-green-900">Registra los camiones que te pertenecen</h2>
+        <h1 className="text-3xl font-bold text-green-800">
+          {isEditMode ? 'Editar Camión' : 'Agregar Camión'}
+        </h1>
+        <h2 className="text-lg text-green-900">
+          {isEditMode ? 'Modifica los datos del camión' : 'Registra los camiones que te pertenecen'}
+        </h2>
         </div>
     </div>
 
@@ -144,7 +189,7 @@ export default function AddCamionView() {
                  <input
                   type="submit"
                   className="bg-green-900 p-1 text-lg w-xs  block text-white rounded-xs font-bold cursor-pointer hover:bg-green-600"
-                  value='Registrar Camión'
+                  value={isEditMode ? 'Actualizar Camión' : 'Registrar Camión'}
                   />
         </form>
     </div>
