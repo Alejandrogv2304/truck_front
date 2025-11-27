@@ -7,6 +7,7 @@ import DashboardView from "./views/DashboardView";
 import CamionView from "./views/CamionView";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AddCamionView from "./views/AddCamionView";
+import ConductoresView from "./views/ConductoresView";
 
 function Router() {
   
@@ -26,6 +27,7 @@ function Router() {
             <Route path="/admin/camiones" element={<CamionView/>}/>
             <Route path="/admin/camiones/agregar" element={<AddCamionView/>}/>
             <Route path="/admin/camiones/editar/:id" element={<AddCamionView/>}/>
+            <Route path="/admin/conductores" element={<ConductoresView/>}/>
           </Route>
         </Route>
     </Routes>
