@@ -96,4 +96,16 @@ export async function updateCamion({id, formData}: {id: number, formData: Camion
     }
 }
 
+export async function getAllConductores(){
+    try{
+      const {data} = await api.get('/api/v1/conductor');
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
 

@@ -25,3 +25,14 @@ export type CamionCardProps = Pick <Camion ,'placa'| 'modelo' |'estado'> & {
     onEdit: (id: number) => void
 }
 
+export type ConductorCardProps ={
+    nombre:string
+    apellido:string
+    identificacion:string
+    estado:string
+    id_conductor:number
+    fecha_vinculacion:string
+    onDelete: (id: number) => void
+    onEdit: (id: number) => void
+}
+
