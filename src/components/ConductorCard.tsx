@@ -1,6 +1,8 @@
 import { FaToggleOn } from "react-icons/fa";
 import type { ConductorCardProps } from "../types";
 import { MdEditSquare } from "react-icons/md";
+import { GoPeople } from "react-icons/go";
+import { MdDateRange, MdOutlineLocalPhone  } from "react-icons/md";
 
 export default function ConductorCard({nombre,apellido,identificacion,estado, fecha_vinculacion,id_conductor, onDelete, onEdit, telefono}: ConductorCardProps) {
   return (
@@ -16,15 +18,20 @@ export default function ConductorCard({nombre,apellido,identificacion,estado, fe
             
         </div>
         
-        <div className="flex items-center justify-between mb-6">
-            <h1 className="text-lg  text-slate-600"><span className="font-bold">Identificación:</span> {identificacion}</h1>
+        <div className="flex items-center mb-6 ">
+          
+            <GoPeople className="h-6 w-6 inline-block mr-2" /> 
+          
+            <h1 className="text-lg inline-block text-slate-600"><span className="font-bold">Identificación:</span> {identificacion}</h1>
         </div>
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center  mb-6">
+           <MdDateRange className="h-6 w-6 inline-block mr-2" /> 
             <h1 className="text-lg  text-slate-600"><span className="font-bold">Fecha Vinculación:</span> {fecha_vinculacion}</h1>
         </div>
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center mb-6">
+           <MdOutlineLocalPhone className="h-6 w-6 inline-block mr-2" /> 
             <h1 className="text-lg  text-slate-600"><span className="font-bold">Telefono:</span> {telefono}</h1>
         </div>
 
