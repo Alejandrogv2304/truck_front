@@ -1,17 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import { COLORS } from "../constants/styles";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { getAllConductores } from "../api/TruckAppAPI";
+import { deleteConductor, getAllConductores } from "../api/TruckAppAPI";
 import type { ConductorCardProps } from "../types";
 import ConductorCard from "../components/ConductorCard";
+import { toast } from "sonner";
+import Modal from "../components/Modal";
 
 
 export default function ConductoresView() {
   const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedCamionId, setSelectedCamionId] = useState<number | null>(null);
+    const [selectedConductorId, setSelectedConductorId] = useState<number | null>(null);
   
     // Query para obtener todos los camiones
     const { data: conductores, isLoading, isError } = useQuery({
@@ -21,29 +23,52 @@ export default function ConductoresView() {
       staleTime: 1000 * 60 * 5, // Los datos son "frescos" por 5 minutos
     });
 
+// Mutation para eliminar camión
+  const { mutate: deleteConductorMutation } = useMutation({
+    mutationFn: deleteConductor,
+    onError: (error) => {
+      toast.error(error.message || 'Error al eliminar el cond');
+    },
+    onSuccess: (data) => {
+      toast.success(data?.message || 'Conductor eliminado exitosamente');
+      // Invalida el cache para recargar la lista
+      queryClient.invalidateQueries({ queryKey: ['conductores'] });
+    }
+  });
 
     // Función para manejar eliminación
   const handleDelete = (id: number) => {
-    setSelectedCamionId(id);
+    setSelectedConductorId(id);
     setIsModalOpen(true);
   };
 
-  // const confirmDelete = () => {
-  //   if (selectedCamionId !== null) {
-  //     deleteCamionMutation(selectedCamionId);
-  //     setSelectedCamionId(null);
-  //   }
-  // };
+   const confirmDelete = () => {
+     if (selectedConductorId !== null) {
+       deleteConductorMutation(selectedConductorId);
+       setSelectedConductorId(null);
+     }
+   };
 
   // Función para manejar edición
   const handleEdit = (id: number) => {
-    navigate(`/admin/camiones/editar/${id}`);
+    navigate(`/admin/conductores/editar/${id}`);
   };
 
   return (
     <>
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-10 font-ubuntu">
 
+    {/* Modal de confirmación */}
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onConfirm={confirmDelete}
+            title="Inactivar Conductor"
+            message="¿Estás seguro de que deseas cambiar el estado de este conductor? "
+            confirmText="Cambiar estado"
+            cancelText="Cancelar"
+            type="danger"
+          />
     
    {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6 mb-6 md:mb-8">
@@ -75,7 +100,7 @@ export default function ConductoresView() {
       {/* Error State */}
       {isError && (
         <div className="text-center py-10">
-          <p className="text-red-600">Error al cargar los condcutores</p>
+          <p className="text-red-600">Error al cargar los conductores</p>
         </div>
       )}
 
@@ -100,7 +125,7 @@ export default function ConductoresView() {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-10">
-                    <p className="text-gray-600">No hay camiones registrados aún</p>
+                    <p className="text-gray-600">No hay condcutores registrados aún</p>
                   </div>
                 )}
               </div>

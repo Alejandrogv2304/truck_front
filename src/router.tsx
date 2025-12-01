@@ -8,6 +8,7 @@ import CamionView from "./views/CamionView";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AddCamionView from "./views/AddCamionView";
 import ConductoresView from "./views/ConductoresView";
+import AddConductorView from './views/AddConductorView';
 
 function Router() {
   
@@ -28,6 +29,8 @@ function Router() {
             <Route path="/admin/camiones/agregar" element={<AddCamionView/>}/>
             <Route path="/admin/camiones/editar/:id" element={<AddCamionView/>}/>
             <Route path="/admin/conductores" element={<ConductoresView/>}/>
+            <Route path="/admin/conductores/agregar" element={<AddConductorView/>}/>
+            <Route path="/admin/conductores/editar/:id" element={<AddConductorView/>}/>
           </Route>
         </Route>
     </Routes>

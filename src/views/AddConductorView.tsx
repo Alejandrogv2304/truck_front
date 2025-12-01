@@ -5,10 +5,10 @@ import type {  Conductor } from "../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createConductor, getCamionById, getConductorById, updateCamion, updateConductor } from "../api/TruckAppAPI";
+import { createConductor, getConductorById, updateConductor } from "../api/TruckAppAPI";
 import { useEffect } from "react";
 
-export default function AddCondcutorView() {
+export default function AddConductorView() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const { id } = useParams<{ id: string }>();
@@ -61,7 +61,7 @@ export default function AddCondcutorView() {
       onSuccess: (data) => {
         toast.success(data?.message || 'Conductor agregado exitosamente');
         reset();
-        queryClient.invalidateQueries({ queryKey: ['condcutores'] });
+        queryClient.invalidateQueries({ queryKey: ['conductores'] });
         setTimeout(() => navigate('/admin/conductores'), 1500);
       }
     });
@@ -76,7 +76,7 @@ export default function AddCondcutorView() {
         toast.success(data?.message || 'Condcutor actualizado exitosamente');
         queryClient.invalidateQueries({ queryKey: ['conductores'] });
         queryClient.invalidateQueries({ queryKey: ['condcutor', id] });
-        setTimeout(() => navigate('/admin/camiones'), 1500);
+        setTimeout(() => navigate('/admin/conductores'), 1500);
       }
     });
 
@@ -109,66 +109,80 @@ export default function AddCondcutorView() {
         <form 
         className="max-w-3xl mx-6 bg-[#EDFAF2] p-8 mt-6 rounded-lg shadow-md font-ubuntu border-slate-200 border-1"
          onSubmit={handleSubmit(handleAddConductor)}>
-            <h2 className="text-green-800 font-bold text-xl">Información del camión</h2>
-            <h3 className="text-green-700 mb-6">Completa los datos del vehículo</h3>
+            <h2 className="text-green-800 font-bold text-xl">Información del conductor</h2>
+            <h3 className="text-green-700 mb-6">Completa los datos del conductor</h3>
          
          {/* Modelo */}
                  <div className="grid grid-cols-1 space-y-3">
                    <label
-                     htmlFor="modelo"
+                     htmlFor="nombre"
                      className="text-lg font-semibold text-green-800 pl-3"
                    >
-                     Modelo
+                     Nombre
                    </label>
                    <input
-                     id="modelo"
+                     id="nombre"
                      type="text"
-                     placeholder="Modelo"
+                     placeholder="Nombre"
                      className="bg-white border-white border-2 p-2 rounded-lg placeholder-slate-600 w-lg"
-                     {...register("modelo", {
+                     {...register("nombre", {
                        required: "El modelo es obligatorio",
                      })}
                    />
-                   {errors.modelo && (
-                     <ErrorMessage>{errors.modelo.message}</ErrorMessage>
+                   {errors.nombre && (
+                     <ErrorMessage>{errors.nombre.message}</ErrorMessage>
                    )}
                  </div>
 
-                  {/* Placa */}
+
+                 {/* Apellido */}
                  <div className="grid grid-cols-1 space-y-3">
                    <label
-                     htmlFor="placa"
+                     htmlFor="apellido"
                      className="text-lg font-semibold text-green-800 pl-3"
                    >
-                     Placa
+                     Apellido
                    </label>
                    <input
-                     id="placa"
+                     id="apellido"
                      type="text"
-                     placeholder="Placa"
-                     className="bg-white uppercase border-white border-2 p-2 rounded-lg placeholder-slate-600 w-xs"
-                     {...register("placa", {
-                       required: "La placa es obligatoria",
-                       pattern: {
-                       value: /^[A-Z]{3}\d{3}$/ ,
-                       message: "El formato de la placa no es válido (Ej: ABC123)",
-                       },
-                       validate: (value) => {
-                         const trimmed = value.trim();
-                         if (trimmed !== value) {
-                           return "La placa no puede tener espacios";
-                         }
-                         return true;
-                       }
+                     placeholder="Apellido"
+                     className="bg-white border-white border-2 p-2 rounded-lg placeholder-slate-600 w-lg"
+                     {...register("apellido", {
+                       required: "El apellido es obligatorio",
                      })}
                    />
-                   {errors.placa && (
-                     <ErrorMessage>{errors.placa.message}</ErrorMessage>
+                   {errors.apellido && (
+                     <ErrorMessage>{errors.apellido.message}</ErrorMessage>
+                   )}
+                 </div>
+
+
+                  {/* Identificación */}
+                 <div className="grid grid-cols-1 space-y-3">
+                   <label
+                     htmlFor="identificacion"
+                     className="text-lg font-semibold text-green-800 pl-3"
+                   >
+                     Número de Identificación
+                   </label>
+                   <input
+                     id="identificacion"
+                     type="text"
+                     placeholder="Número de Identificación"
+                     className="bg-white  border-white border-2 p-2 rounded-lg placeholder-slate-600 w-xs"
+                     {...register("identificacion", {
+                       required: "El apellido es obligatorio",
+                     })}
+                       />
+                  
+                   {errors.identificacion && (
+                     <ErrorMessage>{errors.identificacion.message}</ErrorMessage>
                    )}
                  </div>
 
                   {/* Estado */}
-                 <div className="grid grid-cols-1 space-y-3 mb-12">
+                 <div className="grid grid-cols-1 space-y-3">
                    <label
                      htmlFor="estado"
                      className="text-lg font-semibold text-green-800 pl-3"
@@ -191,11 +205,65 @@ export default function AddCondcutorView() {
                    )}
                  </div>
 
+   {/* Telefono */}
+                 <div className="grid grid-cols-1 space-y-3">
+                   <label
+                     htmlFor="telefono"
+                     className="text-lg font-semibold text-green-800 pl-3"
+                   >
+                     Teléfono
+                   </label>
+                   <input
+                     id="telefono"
+                     type="text"
+                     placeholder="Teléfono"
+                     className="bg-white border-white border-2 p-2 rounded-lg placeholder-slate-600 w-xs"
+                     {...register("telefono", {
+                       required: "El teléfono es obligatorio",
+                       pattern: {
+                       value: /^[3]\d{9}$/ ,
+                       message: "El número de teléfono debe tener 10 dígitos y comenzar con 3",
+                       },
+                       validate: (value) => {
+                         const trimmed = value.trim();
+                         if (trimmed !== value) {
+                           return "El número de teléfono no puede tener espacios";
+                         }
+                         return true;
+                       }
+                     })}
+                   />
+                   {errors.telefono && (
+                     <ErrorMessage>{errors.telefono.message}</ErrorMessage>
+                   )}
+                 </div>
+
+                 {/* Fecha de Vinculación */}
+                 <div className="grid grid-cols-1 space-y-3 mb-12">
+                   <label
+                     htmlFor="fecha_vinculacion"
+                     className="text-lg font-semibold text-green-800 pl-3"
+                   >
+                     Fecha de Vinculación
+                   </label>
+                   <input
+                     id="fecha_vinculacion"
+                     type="date"
+                     className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
+                     {...register("fecha_vinculacion", {
+                       required: "La fecha de vinculación es obligatoria",
+                     })}
+                   />
+                   {errors.fecha_vinculacion && (
+                     <ErrorMessage>{errors.fecha_vinculacion.message}</ErrorMessage>
+                   )}
+                 </div>
+
 
                  <input
                   type="submit"
                   className="bg-green-900 p-1 text-lg w-xs  block text-white rounded-xs font-bold cursor-pointer hover:bg-green-600"
-                  value={isEditMode ? 'Actualizar Camión' : 'Registrar Camión'}
+                  value={isEditMode ? 'Actualizar Conductor' : 'Registrar Conductor'}
                   />
         </form>
     </div>

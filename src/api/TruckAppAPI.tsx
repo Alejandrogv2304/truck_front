@@ -156,3 +156,26 @@ export async function updateConductor({id, formData}: {id: number, formData: Con
     }
 }
 
+
+
+export async function deleteConductor(id: number){
+    try{
+      const {data} = await api.patch(`/api/v1/conductor/${id}/change-state`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al eliminar el conductor')
+      }
+      throw error
+    }
+}
