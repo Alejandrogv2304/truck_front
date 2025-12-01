@@ -2,7 +2,7 @@ import { FaToggleOn } from "react-icons/fa";
 import type { ConductorCardProps } from "../types";
 import { MdEditSquare } from "react-icons/md";
 
-export default function ConductorCard({nombre,apellido,identificacion,estado, fecha_vinculacion,id_conductor, onDelete, onEdit}: ConductorCardProps) {
+export default function ConductorCard({nombre,apellido,identificacion,estado, fecha_vinculacion,id_conductor, onDelete, onEdit, telefono}: ConductorCardProps) {
   return (
     <div className="bg-[#EDFAF2] font-ubuntu rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-200">
         <div className="flex items-center justify-between mb-4">
@@ -22,6 +22,10 @@ export default function ConductorCard({nombre,apellido,identificacion,estado, fe
 
         <div className="flex items-center justify-between mb-6">
             <h1 className="text-lg  text-slate-600"><span className="font-bold">Fecha Vinculación:</span> {fecha_vinculacion}</h1>
+        </div>
+
+        <div className="flex items-center justify-between mb-6">
+            <h1 className="text-lg  text-slate-600"><span className="font-bold">Telefono:</span> {telefono}</h1>
         </div>
 
         {/*Botones */}

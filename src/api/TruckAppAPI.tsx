@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../config/axios"
-import type {  Admin, Camion } from "../types";
+import type {  Admin, Camion, Conductor } from "../types";
 
 
 export async function getAdmin(){
@@ -108,4 +108,51 @@ export async function getAllConductores(){
     }
 }
 
+export async function createConductor(formData: Conductor){
+    try{
+      const {data} = await api.post('/api/v1/conductor', formData);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
+
+export async function getConductorById(id: number){
+    try{
+      const {data} = await api.get(`/api/v1/conductor/${id}`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
+
+export async function updateConductor({id, formData}: {id: number, formData: Conductor}){
+    try{
+      const {data} = await api.patch(`/api/v1/conductor/${id}`, formData);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al actualizar el condcutor')
+      }
+      throw error
+    }
+}
 

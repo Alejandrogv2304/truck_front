@@ -92,6 +92,7 @@ export default function ConductoresView() {
                       estado={conductor.estado}
                       id_conductor={conductor.id_conductor}
                       identificacion={conductor.identificacion}
+                      telefono={conductor.telefono}
                       fecha_vinculacion={conductor.fecha_vinculacion}
                       onDelete={handleDelete}
                       onEdit={handleEdit}

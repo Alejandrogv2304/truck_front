@@ -31,8 +31,18 @@ export type ConductorCardProps ={
     identificacion:string
     estado:string
     id_conductor:number
+    telefono:string
     fecha_vinculacion:string
     onDelete: (id: number) => void
     onEdit: (id: number) => void
+}
+
+export type Conductor ={
+    nombre:string
+    apellido:string
+    identificacion:string
+    telefono:string
+    estado:string
+    fecha_vinculacion:string
 }
 
