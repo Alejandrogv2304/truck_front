@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../config/axios"
-import type {  Admin, Camion, Conductor } from "../types";
+import type {  Admin, Camion, Conductor, Viaje } from "../types";
 
 
 export async function getAdmin(){
@@ -175,6 +175,72 @@ export async function deleteConductor(id: number){
         }
         
         throw new Error(error.response.data.error || 'Error al eliminar el conductor')
+      }
+      throw error
+    }
+}
+
+
+
+//Funciones relacionadas con los viajes
+export async function getViajeById(id: number){
+    try{
+      const {data} = await api.get(`/api/v1/viaje/${id}`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
+
+
+
+export async function createViaje(formData: Viaje){
+    try{
+      const {data} = await api.post('/api/v1/viaje', formData);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
+
+export async function getAllViajes(){
+    try{
+      const {data} = await api.get('/api/v1/viaje');
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
+
+export async function updateViaje({id, formData}: {id: number, formData: Viaje}){
+    try{
+      const {data} = await api.patch(`/api/v1/viaje/${id}`, formData);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al actualizar el viaje')
       }
       throw error
     }

@@ -46,3 +46,13 @@ export type Conductor ={
     fecha_vinculacion:string
 }
 
+export type Viaje = {
+    lugar_origen:string
+    lugar_destino:string
+    fecha_inicio:string
+    valor:number
+    num_manifiesto:string
+    camion:string
+    conductor:string
+    estado:string
+}

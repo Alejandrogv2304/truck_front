@@ -70,12 +70,12 @@ export default function AddConductorView() {
     const updateMutation = useMutation({
       mutationFn: updateConductor,
       onError: (error) => {
-        toast.error(error.message || 'Error al actualizar el condcutor');
+        toast.error(error.message || 'Error al actualizar el conductor');
       },
       onSuccess: (data) => {
-        toast.success(data?.message || 'Condcutor actualizado exitosamente');
+        toast.success(data?.message || 'Conductor actualizado exitosamente');
         queryClient.invalidateQueries({ queryKey: ['conductores'] });
-        queryClient.invalidateQueries({ queryKey: ['condcutor', id] });
+        queryClient.invalidateQueries({ queryKey: ['conductor', id] });
         setTimeout(() => navigate('/admin/conductores'), 1500);
       }
     });
