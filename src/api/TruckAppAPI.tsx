@@ -74,6 +74,18 @@ export async function getCamionById(id: number){
     }
 }
 
+export async function getAllCamionPlacaAndId(){
+    try{
+      const {data} = await api.get('/api/v1/camion/select');
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+
 export async function updateCamion({id, formData}: {id: number, formData: Camion}){
     try{
       const {data} = await api.patch(`/api/v1/camion/${id}`, formData);
@@ -175,6 +187,19 @@ export async function deleteConductor(id: number){
         }
         
         throw new Error(error.response.data.error || 'Error al eliminar el conductor')
+      }
+      throw error
+    }
+}
+
+
+export async function getAllConductoresNameAndId(){
+    try{
+      const {data} = await api.get('/api/v1/conductor/select');
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
       }
       throw error
     }

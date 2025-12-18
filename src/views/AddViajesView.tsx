@@ -5,7 +5,7 @@ import type {  Conductor, Viaje } from "../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createConductor, createViaje, getViajeById, updateConductor, updateViaje } from "../api/TruckAppAPI";
+import { createConductor, createViaje, getAllCamionPlacaAndId, getAllConductoresNameAndId, getViajeById, updateConductor, updateViaje } from "../api/TruckAppAPI";
 import { useEffect } from "react";
 
 export default function AddViajesView() {
@@ -39,7 +39,25 @@ export default function AddViajesView() {
       queryFn: () => getViajeById(Number(id)),
       enabled: isEditMode, // Solo ejecuta si hay un id
     });
+    
 
+    // Query para obtener los conductores 
+    const { data: conductorData } = useQuery({
+      queryKey: ['conductornombre', id],
+      queryFn: () => getAllConductoresNameAndId(),
+      enabled: true,
+    });
+
+   
+
+    // Query para obtener los camiones 
+    const { data: camionesData } = useQuery({
+      queryKey: ['camionesPlaca', id],
+      queryFn: () => getAllCamionPlacaAndId(),
+      enabled: true,
+    });
+
+  console.log(camionesData);
     // Cargar datos en el formulario cuando se obtienen
     useEffect(() => {
       if (viajeData) {
@@ -232,6 +250,63 @@ export default function AddViajesView() {
                    </select>
                    {errors.estado && (
                      <ErrorMessage>{errors.estado.message}</ErrorMessage>
+                   )}
+                 </div>
+
+
+
+
+
+                 {/* Conductor */}
+                 <div className="grid grid-cols-1 space-y-3">
+                   <label
+                     htmlFor="conductor"
+                     className="text-lg font-semibold text-green-800 pl-3"
+                   >
+                     Conductor
+                   </label>
+                   <select
+                     id="conductor"
+                     className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
+                     {...register("conductor", {
+                       required: "El conductor es obligatorio",
+                     })}
+                   >
+                     <option value="">Selecciona un conductor</option>
+                     {conductorData?.map((conductor: {id: number, nombre: string, apellido:string}) => (
+                       <option key={conductor.id} value={conductor.id}>{conductor.nombre} {conductor.apellido}</option>
+                     ))}
+                    
+                   </select>
+                   {errors.conductor && (
+                     <ErrorMessage>{errors.conductor.message}</ErrorMessage>
+                   )}
+                 </div>
+
+
+                 {/* Camion */}
+                 <div className="grid grid-cols-1 space-y-3">
+                   <label
+                     htmlFor="camion"
+                     className="text-lg font-semibold text-green-800 pl-3"
+                   >
+                     Camion
+                   </label>
+                   <select
+                     id="camion"
+                     className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
+                     {...register("camion", {
+                       required: "El camion es obligatorio",
+                     })}
+                   >
+                     <option value="">Selecciona un camion</option>
+                     {camionesData?.map((camion: {id: number, placa: string}) => (
+                       <option key={camion.id} value={camion.id}>{camion.placa} </option>
+                     ))}
+                    
+                   </select>
+                   {errors.camion && (
+                     <ErrorMessage>{errors.camion.message}</ErrorMessage>
                    )}
                  </div>
 
