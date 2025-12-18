@@ -229,7 +229,17 @@ export async function createViaje(formData: Viaje){
       return data
     }catch(error){
       if(isAxiosError(error) && error.response){
-        throw new Error(error.response.data.error)
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al crear el viaje')
       }
       throw error
     }

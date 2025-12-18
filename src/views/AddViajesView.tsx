@@ -1,11 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import ErrorMessage from "../components/ErrorMessage";
-import type {  Conductor, Viaje } from "../types";
+import type {  Viaje } from "../types";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createConductor, createViaje, getAllCamionPlacaAndId, getAllConductoresNameAndId, getViajeById, updateConductor, updateViaje } from "../api/TruckAppAPI";
+import {  createViaje, getAllCamionPlacaAndId, getAllConductoresNameAndId, getViajeById, updateViaje } from "../api/TruckAppAPI";
 import { useEffect } from "react";
 
 export default function AddViajesView() {
@@ -21,8 +21,8 @@ export default function AddViajesView() {
        fecha_inicio:"",
        valor:0,
        num_manifiesto:"",
-       camion:"",
-       conductor:"",
+       idCamion:1,
+       idConductor:1,
        estado:"",
       };
 
@@ -57,7 +57,7 @@ export default function AddViajesView() {
       enabled: true,
     });
 
-  console.log(camionesData);
+
     // Cargar datos en el formulario cuando se obtienen
     useEffect(() => {
       if (viajeData) {
@@ -67,8 +67,8 @@ export default function AddViajesView() {
          fecha_inicio:viajeData.fecha_inicio,
          valor: viajeData.valor,
          num_manifiesto:viajeData.manifiesto,
-         camion:viajeData.camion,
-         conductor:viajeData.conductor,
+         idCamion: typeof viajeData.camion === 'object' ? viajeData.camion.id : viajeData.camion,
+         idConductor: typeof viajeData.conductor === 'object' ? viajeData.conductor.id : viajeData.conductor,
          estado:viajeData.estado,
         });
       }
@@ -103,12 +103,50 @@ export default function AddViajesView() {
     });
 
     const handleAddViaje = (formData: Viaje) => {
+      console.log('Datos del formulario antes de transformar:', formData);
+      
+      // Transformar los datos para asegurar que sean números enteros válidos
+      const idCamion = parseInt(String(formData.idCamion), 10);
+      const idConductor = parseInt(String(formData.idConductor), 10);
+      const valor = parseFloat(String(formData.valor));
+
+      // Validar que las conversiones sean exitosas
+      if (isNaN(idCamion) || idCamion <= 0) {
+        toast.error('Debe seleccionar un camión válido');
+        return;
+      }
+
+      if (isNaN(idConductor) || idConductor <= 0) {
+        toast.error('Debe seleccionar un conductor válido');
+        return;
+      }
+
+      if (isNaN(valor) || valor < 0) {
+        toast.error('El valor debe ser un número válido');
+        return;
+      }
+
+      const dataToSend = {
+        lugar_origen: formData.lugar_origen,
+        lugar_destino: formData.lugar_destino,
+        fecha_inicio: formData.fecha_inicio,
+        valor: valor,
+        num_manifiesto: formData.num_manifiesto,
+        idCamion: idCamion,
+        idConductor: idConductor,
+        estado: formData.estado,
+      };
+
+      console.log('Datos a enviar al backend:', dataToSend);
+
       if (isEditMode) {
-        updateMutation.mutate({ id: Number(id), formData });
+        updateMutation.mutate({ id: Number(id), formData: dataToSend });
       } else {
-        createMutation.mutate(formData);
+        createMutation.mutate(dataToSend);
       }
     };
+
+    
   return (
     <>
     {/* Div de inicio */}
@@ -168,10 +206,12 @@ export default function AddViajesView() {
                    <input
                      id="valor"
                      type="number"
+                     step="0.01"
                      placeholder="Valor"
                      className="bg-white border-white border-2 p-2 rounded-lg placeholder-slate-600 w-lg"
                      {...register("valor", {
                        required: "El valor es obligatorio",
+                       valueAsNumber: true,
                      })}
                    />
                    {errors.valor && (
@@ -260,26 +300,26 @@ export default function AddViajesView() {
                  {/* Conductor */}
                  <div className="grid grid-cols-1 space-y-3">
                    <label
-                     htmlFor="conductor"
+                     htmlFor="idConductor"
                      className="text-lg font-semibold text-green-800 pl-3"
                    >
                      Conductor
                    </label>
                    <select
-                     id="conductor"
+                     id="idConductor"
                      className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
-                     {...register("conductor", {
+                     {...register("idConductor", {
                        required: "El conductor es obligatorio",
                      })}
                    >
                      <option value="">Selecciona un conductor</option>
-                     {conductorData?.map((conductor: {id: number, nombre: string, apellido:string}) => (
-                       <option key={conductor.id} value={conductor.id}>{conductor.nombre} {conductor.apellido}</option>
+                     {conductorData?.map((conductor: {id_conductor: number, nombre: string, apellido:string}) => (
+                       <option key={conductor.id_conductor} value={conductor.id_conductor}>{conductor.nombre} {conductor.apellido}</option>
                      ))}
                     
                    </select>
-                   {errors.conductor && (
-                     <ErrorMessage>{errors.conductor.message}</ErrorMessage>
+                   {errors.idConductor && (
+                     <ErrorMessage>{errors.idConductor.message}</ErrorMessage>
                    )}
                  </div>
 
@@ -287,26 +327,26 @@ export default function AddViajesView() {
                  {/* Camion */}
                  <div className="grid grid-cols-1 space-y-3">
                    <label
-                     htmlFor="camion"
+                     htmlFor="idCamion"
                      className="text-lg font-semibold text-green-800 pl-3"
                    >
                      Camion
                    </label>
                    <select
-                     id="camion"
+                     id="idCamion"
                      className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
-                     {...register("camion", {
+                     {...register("idCamion", {
                        required: "El camion es obligatorio",
                      })}
                    >
                      <option value="">Selecciona un camion</option>
-                     {camionesData?.map((camion: {id: number, placa: string}) => (
-                       <option key={camion.id} value={camion.id}>{camion.placa} </option>
+                     {camionesData?.map((camion: {id_camion: number, placa: string}) => (
+                       <option key={camion.id_camion} value={camion.id_camion}>{camion.placa} </option>
                      ))}
                     
                    </select>
-                   {errors.camion && (
-                     <ErrorMessage>{errors.camion.message}</ErrorMessage>
+                   {errors.idCamion && (
+                     <ErrorMessage>{errors.idCamion.message}</ErrorMessage>
                    )}
                  </div>
 

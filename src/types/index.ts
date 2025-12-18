@@ -52,7 +52,7 @@ export type Viaje = {
     fecha_inicio:string
     valor:number
     num_manifiesto:string
-    camion:string
-    conductor:string
+    idCamion:number
+    idConductor:number
     estado:string
 }
