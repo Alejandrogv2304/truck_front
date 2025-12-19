@@ -56,3 +56,17 @@ export type Viaje = {
     idConductor:number
     estado:string
 }
+
+export type ViajeCardProps ={
+    fecha_inicio:string
+    lugar_origen:string
+    lugar_destino:string
+    estado:string
+    valor:number
+    num_manifiesto:string
+    conductor:string
+    camion:string
+    onDelete: (id: number) => void
+    onEdit: (id: number) => void
+}
+
