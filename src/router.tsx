@@ -35,6 +35,7 @@ function Router() {
             <Route path="/admin/conductores/editar/:id" element={<AddConductorView/>}/>
             <Route path="/admin/viajes" element={<ViajeView/>}/>
             <Route path="/admin/viajes/agregar" element={<AddViajesView/>}/>
+            <Route path="/admin/viajes/editar/:id" element={<AddViajesView/>}/>
           </Route>
         </Route>
     </Routes>

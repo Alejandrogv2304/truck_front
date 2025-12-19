@@ -58,6 +58,7 @@ export type Viaje = {
 }
 
 export type ViajeCardProps ={
+    id_viaje:number
     fecha_inicio:string
     lugar_origen:string
     lugar_destino:string

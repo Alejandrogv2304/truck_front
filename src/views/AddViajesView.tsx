@@ -60,19 +60,35 @@ export default function AddViajesView() {
 
     // Cargar datos en el formulario cuando se obtienen
     useEffect(() => {
-      if (viajeData) {
+      if (viajeData && camionesData && conductorData) {
+        // Buscar el ID del camión por placa
+        const camionEncontrado = camionesData.find(
+          (c: {id_camion: number, placa: string}) => c.placa === viajeData.camion
+        );
+        
+        // Buscar el ID del conductor por nombre
+        const conductorEncontrado = conductorData.find(
+          (c: {id_conductor: number, nombre: string}) => c.nombre === viajeData.conductor
+        );
+        
+        // Formatear la fecha si es necesario
+        let fechaFormatted = viajeData.fecha_inicio;
+        if (fechaFormatted && fechaFormatted.includes('T')) {
+          fechaFormatted = fechaFormatted.split('T')[0];
+        }
+        
         reset({
-         lugar_origen: viajeData.lugar_origen,
-         lugar_destino:viajeData.lugar_destino,
-         fecha_inicio:viajeData.fecha_inicio,
-         valor: viajeData.valor,
-         num_manifiesto:viajeData.manifiesto,
-         idCamion: typeof viajeData.camion === 'object' ? viajeData.camion.id : viajeData.camion,
-         idConductor: typeof viajeData.conductor === 'object' ? viajeData.conductor.id : viajeData.conductor,
-         estado:viajeData.estado,
+         lugar_origen: viajeData.lugar_origen || '',
+         lugar_destino: viajeData.lugar_destino || '',
+         fecha_inicio: fechaFormatted || '',
+         valor: parseFloat(viajeData.valor) || 0,
+         num_manifiesto: viajeData.num_manifiesto || '',
+         idCamion: camionEncontrado?.id_camion || 1,
+         idConductor: conductorEncontrado?.id_conductor || 1,
+         estado: viajeData.estado || '',
         });
       }
-    }, [viajeData, reset]);
+    }, [viajeData, camionesData, conductorData, reset]);
 
     // Mutation para crear
     const createMutation = useMutation({
@@ -126,22 +142,31 @@ export default function AddViajesView() {
         return;
       }
 
-      const dataToSend = {
-        lugar_origen: formData.lugar_origen,
-        lugar_destino: formData.lugar_destino,
-        fecha_inicio: formData.fecha_inicio,
-        valor: valor,
-        num_manifiesto: formData.num_manifiesto,
-        idCamion: idCamion,
-        idConductor: idConductor,
-        estado: formData.estado,
-      };
-
-      console.log('Datos a enviar al backend:', dataToSend);
-
       if (isEditMode) {
-        updateMutation.mutate({ id: Number(id), formData: dataToSend });
+        // En modo edición, enviar solo los campos permitidos
+        const dataToUpdate = {
+          lugar_origen: formData.lugar_origen,
+          lugar_destino: formData.lugar_destino,
+          valor: valor,
+          estado: formData.estado,
+        };
+        
+        
+        updateMutation.mutate({ id: Number(id), formData: dataToUpdate as Viaje });
       } else {
+        // En modo creación, enviar todos los campos
+        const dataToSend = {
+          lugar_origen: formData.lugar_origen,
+          lugar_destino: formData.lugar_destino,
+          fecha_inicio: formData.fecha_inicio,
+          valor: valor,
+          num_manifiesto: formData.num_manifiesto,
+          idCamion: idCamion,
+          idConductor: idConductor,
+          estado: formData.estado,
+        };
+        
+        
         createMutation.mutate(dataToSend);
       }
     };
@@ -184,13 +209,19 @@ export default function AddViajesView() {
                      id="num_manifiesto"
                      type="text"
                      placeholder="Manifiesto"
-                     className="bg-white border-white border-2 p-2 rounded-lg placeholder-slate-600 w-lg"
+                     disabled={isEditMode}
+                     className={`border-2 p-2 rounded-lg placeholder-slate-600 w-lg ${
+                       isEditMode ? 'bg-gray-200 cursor-not-allowed' : 'bg-white border-white'
+                     }`}
                      {...register("num_manifiesto", {
                        required: "El manifiesto es obligatorio",
                      })}
                    />
                    {errors.num_manifiesto && (
                      <ErrorMessage>{errors.num_manifiesto.message}</ErrorMessage>
+                   )}
+                   {isEditMode && (
+                     <p className="text-sm text-gray-600 font-semibold">Este campo no se puede modificar</p>
                    )}
                  </div>
 
@@ -307,9 +338,13 @@ export default function AddViajesView() {
                    </label>
                    <select
                      id="idConductor"
-                     className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
+                     disabled={isEditMode}
+                     className={`border-2 p-2 rounded-lg text-slate-600 w-xs ${
+                       isEditMode ? 'bg-gray-200 cursor-not-allowed' : 'bg-white border-white'
+                     }`}
                      {...register("idConductor", {
                        required: "El conductor es obligatorio",
+                       valueAsNumber: true,
                      })}
                    >
                      <option value="">Selecciona un conductor</option>
@@ -320,6 +355,9 @@ export default function AddViajesView() {
                    </select>
                    {errors.idConductor && (
                      <ErrorMessage>{errors.idConductor.message}</ErrorMessage>
+                   )}
+                   {isEditMode && (
+                     <p className="text-sm text-gray-600 font-semibold">Este campo no se puede modificar</p>
                    )}
                  </div>
 
@@ -334,9 +372,13 @@ export default function AddViajesView() {
                    </label>
                    <select
                      id="idCamion"
-                     className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
+                     disabled={isEditMode}
+                     className={`border-2 p-2 rounded-lg text-slate-600 w-xs ${
+                       isEditMode ? 'bg-gray-200 cursor-not-allowed' : 'bg-white border-white'
+                     }`}
                      {...register("idCamion", {
                        required: "El camion es obligatorio",
+                       valueAsNumber: true,
                      })}
                    >
                      <option value="">Selecciona un camion</option>
@@ -347,6 +389,9 @@ export default function AddViajesView() {
                    </select>
                    {errors.idCamion && (
                      <ErrorMessage>{errors.idCamion.message}</ErrorMessage>
+                   )}
+                   {isEditMode && (
+                     <p className="text-sm text-gray-600 font-semibold">Este campo no se puede modificar</p>
                    )}
                  </div>
 
@@ -363,13 +408,19 @@ export default function AddViajesView() {
                    <input
                      id="fecha_inicio"
                      type="date"
-                     className="bg-white border-white border-2 p-2 rounded-lg text-slate-600 w-xs"
+                     disabled={isEditMode}
+                     className={`border-2 p-2 rounded-lg text-slate-600 w-xs ${
+                       isEditMode ? 'bg-gray-200 cursor-not-allowed' : 'bg-white border-white'
+                     }`}
                      {...register("fecha_inicio", {
                        required: "La fecha de inicio es obligatoria",
                      })}
                    />
                    {errors.fecha_inicio && (
                      <ErrorMessage>{errors.fecha_inicio.message}</ErrorMessage>
+                   )}
+                   {isEditMode && (
+                     <p className="text-sm text-gray-600 font-semibold">Este campo no se puede modificar</p>
                    )}
                  </div>
 

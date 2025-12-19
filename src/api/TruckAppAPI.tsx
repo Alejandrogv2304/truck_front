@@ -246,9 +246,11 @@ export async function createViaje(formData: Viaje){
 }
 
 
-export async function getAllViajes(){
+export async function getAllViajes(page: number = 1, limit: number = 20){
     try{
-      const {data} = await api.get('/api/v1/viaje');
+      const {data} = await api.get('/api/v1/viaje', {
+        params: { page, limit }
+      });
       return data
     }catch(error){
       if(isAxiosError(error) && error.response){

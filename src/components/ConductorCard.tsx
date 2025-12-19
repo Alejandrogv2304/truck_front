@@ -6,7 +6,7 @@ import { MdDateRange, MdOutlineLocalPhone  } from "react-icons/md";
 
 export default function ConductorCard({nombre,apellido,identificacion,estado, fecha_vinculacion,id_conductor, onDelete, onEdit, telefono}: ConductorCardProps) {
   return (
-    <div className="bg-[#EDFAF2] font-ubuntu rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-200">
+    <div className={`${estado === "activo" ? "bg-[#EDFAF2]" : "bg-slate-100"} font-ubuntu rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-200`}>
         <div className="flex items-center justify-between mb-4">
             <div>
                <h1 className="text-2xl font-semibold text-green-800">{nombre}</h1>
