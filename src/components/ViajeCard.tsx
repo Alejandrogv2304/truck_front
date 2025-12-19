@@ -7,7 +7,7 @@ import { IoIosInformationCircle } from "react-icons/io";
 export default function ViajesCard({fecha_inicio, lugar_origen,num_manifiesto, lugar_destino,conductor,valor, camion, estado,id_viaje, onDelete, onEdit}:ViajeCardProps) {
   return (
     
-      <div className={`${estado === "activo" ? "bg-[#EDFAF2]" : "bg-slate-100"} font-ubuntu rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-200`}>
+      <div className={`${estado === "activo" ? "bg-[#EDFAF2]" : "bg-slate-100"} font-ubuntu rounded-lg p-4 border-2 border-slate-100 shadow-md hover:shadow-lg transition-shadow duration-200`}>
       
               <FaRoad  className="text-3xl text-green-900 mb-2"/>
       

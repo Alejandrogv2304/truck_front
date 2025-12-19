@@ -6,7 +6,7 @@ import { FaTruckMoving } from "react-icons/fa";
 
 export default function CamionCard({placa, modelo, estado, id_camion, onDelete, onEdit}: CamionCardProps) {
   return (
-    <div className={`${estado === "activo" ? "bg-[#EDFAF2]" : "bg-slate-100"} font-ubuntu rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-200`}>
+    <div className={`${estado === "activo" ? "bg-[#EDFAF2]" : "bg-slate-100"} font-ubuntu  border-2 border-slate-100 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-200`}>
 
         <FaTruckMoving  className="text-3xl text-green-900 mb-2"/>
 
