@@ -3,6 +3,7 @@ import { MdEditSquare } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegUser,  FaRegCalendar, FaRegMoneyBillAlt,FaRoad,FaToggleOn  } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export default function ViajesCard({fecha_inicio, lugar_origen,num_manifiesto, lugar_destino,conductor,valor, camion, estado,id_viaje, onDelete, onEdit}:ViajeCardProps) {
   return (
@@ -53,6 +54,7 @@ export default function ViajesCard({fecha_inicio, lugar_origen,num_manifiesto, l
 
              
             {/*Botones */}
+            <div className="flex items-center justify-between">
             <div className="flex items-center justify-items-start mb-2">
                   <button 
                     onClick={() => onDelete(id_viaje)}
@@ -71,6 +73,14 @@ export default function ViajesCard({fecha_inicio, lugar_origen,num_manifiesto, l
                   </button>
       
               </div>
+              <Link to={`/admin/viajes/${id_viaje}`}>  
+              <button className="bg-white p-2 cursor-pointer rounded-lg hover:bg-green-500 hover:text-white hover:shadow-lg transition-shadow duration-200 flex items-center">
+                  <span className="text-lg font-semibold text-green-700 hover:text-white"> Ver detalles</span>
+                </button>
+              </Link>
+              </div>
+
+              
       
           </div>
     
