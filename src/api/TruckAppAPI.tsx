@@ -305,3 +305,20 @@ export async function deleteViaje(id: number){
       throw error
     }
   }
+
+
+  {/* Gastos del viaje especifico*/}
+
+
+  export async function getAllGastosViaje(id: number){
+    try{
+      const {data} = await api.get(`/api/v1/gastos-viaje/${id}`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error
+    }
+}
+

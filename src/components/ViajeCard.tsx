@@ -73,8 +73,8 @@ export default function ViajesCard({fecha_inicio, lugar_origen,num_manifiesto, l
                   </button>
       
               </div>
-              <Link to={`/admin/viajes/${id_viaje}`}>  
-              <button className="bg-white p-2 cursor-pointer rounded-lg hover:bg-green-500 hover:text-white hover:shadow-lg transition-shadow duration-200 flex items-center">
+              <Link to={`/admin/viajes/gastos/${id_viaje}`}>  
+              <button className="bg-white p-2 cursor-pointer rounded-lg hover:bg-green-500 hover:text-white hover:shadow-lg transition-shadow duration-200 flex items-center border-1 border-black">
                   <span className="text-lg font-semibold text-green-700 hover:text-white"> Ver detalles</span>
                 </button>
               </Link>

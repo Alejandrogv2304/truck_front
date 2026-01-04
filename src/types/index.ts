@@ -71,3 +71,10 @@ export type ViajeCardProps ={
     onEdit: (id: number) => void
 }
 
+export type GastoViaje = {
+    id_gasto_viaje : number
+    valor: number
+    estado: string
+    tipo_gasto: string
+}
+
