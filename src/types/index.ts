@@ -73,7 +73,7 @@ export type ViajeCardProps ={
 
 export type GastoViaje = {
     id_gasto_viaje : number
-    valor: number
+    valor: number | string  // El backend devuelve decimales como strings
     estado: string
     tipo_gasto: string
 }
