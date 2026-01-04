@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../config/axios"
-import type {  Admin, Camion, Conductor, Viaje } from "../types";
+import type {  Admin, Camion, Conductor, GastoViajeForm, Viaje } from "../types";
 
 
 export async function getAdmin(){
@@ -339,6 +339,29 @@ export async function deleteGastoViaje(id: number){
         }
         
         throw new Error(error.response.data.error || 'Error al eliminar el gasto')
+      }
+      throw error
+    }
+}
+
+
+export async function createGastoViaje(idViaje: number, formData: GastoViajeForm){
+    try{
+      const {data} = await api.post(`/api/v1/gastos-viaje/${idViaje}`, formData);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al crear el gasto del viaje')
       }
       throw error
     }

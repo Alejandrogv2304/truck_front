@@ -78,3 +78,7 @@ export type GastoViaje = {
     tipo_gasto: string
 }
 
+export type GastoViajeForm = {
+    valor: string | number  // String en el form, se convierte a number al enviar
+    tipo_gasto: string
+} 
