@@ -15,7 +15,7 @@ const [currentPage, setCurrentPage] = useState(1);
 const [selectedPlaca, setSelectedPlaca] = useState<string>("");
 const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedGastoCamionId, setSelectedGastoCamionId] = useState<number | null>(null);
-const limit = 20;
+const limit = 10;
 
 {/*Query para traer los gastos de camión */}
 
@@ -82,9 +82,9 @@ const limit = 20;
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     onConfirm={confirmDelete}
-                    title="Inactivar Viaje"
-                    message="¿Estás seguro de que deseas cambiar el estado de este viaje? "
-                    confirmText="Cambiar estado"
+                    title="Eliminar gasto de camión"
+                    message="¿Estás seguro de que deseas eliminar este gasto de camión? "
+                    confirmText="Eliminar "
                     cancelText="Cancelar"
                     type="danger"
                   />
@@ -178,9 +178,9 @@ const limit = 20;
                                 <div className="flex items-center justify-center gap-2 mt-8">
                                   <button
                                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                    disabled={!meta.hasPrevPage}
+                                    disabled={!meta.hasPreviousPage}
                                     className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                                      meta.hasPrevPage
+                                      meta.hasPreviousPage
                                         ? `${COLORS["dark_secundary"]} ${COLORS["hover"]} text-white`
                                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                     }`}

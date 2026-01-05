@@ -14,7 +14,7 @@ export default function ViajeView() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedViajeId, setSelectedViajeId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 20;
+  const limit = 10;
 
   // Query para obtener todos los viajes
   const { data: viajesResponse, isLoading, isError } = useQuery({
