@@ -367,3 +367,23 @@ export async function createGastoViaje(idViaje: number, formData: GastoViajeForm
     }
 }
 
+export async function getAllGastosCamion(page: number = 1, limit: number = 15, placa?: string){
+    try{
+      const params: { page: number; limit: number; placa?: string } = { page, limit };
+      
+      // Solo agregar placa si tiene valor
+      if (placa && placa.trim() !== '') {
+        params.placa = placa;
+      }
+      
+      const {data} = await api.get('/api/v1/gastos-camion', { params });
+      return data;
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        throw new Error(error.response.data.error)
+      }
+      throw error;
+    }
+}
+
+
