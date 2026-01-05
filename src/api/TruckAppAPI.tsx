@@ -367,6 +367,8 @@ export async function createGastoViaje(idViaje: number, formData: GastoViajeForm
     }
 }
 
+{/* Gastos del camión especifico*/}
+
 export async function getAllGastosCamion(page: number = 1, limit: number = 15, placa?: string){
     try{
       const params: { page: number; limit: number; placa?: string } = { page, limit };
@@ -386,4 +388,26 @@ export async function getAllGastosCamion(page: number = 1, limit: number = 15, p
     }
 }
 
+
+export async function deleteGastoCamion(id: number){
+    try{
+      const {data} = await api.delete(`/api/v1/gastos-camion/${id}`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al eliminar el gasto')
+      }
+      throw error
+    }
+}
 

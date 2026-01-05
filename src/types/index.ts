@@ -82,3 +82,14 @@ export type GastoViajeForm = {
     valor: string | number  // String en el form, se convierte a number al enviar
     tipo_gasto: string
 } 
+
+
+export type GastoCamionCardProps={
+    id_gasto_camion: number;
+    valor: number;
+    tipo_gasto: string;
+    descripcion?: string;
+    fecha: Date;
+    placa: string;
+    onDelete: (id: number) => void;
+}
