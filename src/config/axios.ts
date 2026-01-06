@@ -14,5 +14,19 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Interceptor para manejar respuestas y errores de autenticación
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Si el token expira o es inválido (401), limpiar y redirigir
+    if (error.response?.status === 401) {
+      localStorage.removeItem("AUTH_TOKEN");
+      localStorage.removeItem("USER_NAME");
+      window.location.href = "/auth/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
 
 export default api;

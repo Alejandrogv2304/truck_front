@@ -5,6 +5,8 @@ import { isAxiosError } from "axios";
 import { toast } from "sonner";
 import api from "../config/axios";
 import ErrorMessage from "../components/ErrorMessage";
+import { useEffect } from "react";
+
 export default function LoginView() {
     const navigate = useNavigate(); 
   const initialValues: LoginForm = {
@@ -13,6 +15,24 @@ export default function LoginView() {
   }
   const { register, handleSubmit, formState:{errors}} = useForm({defaultValues:initialValues});
  
+  // Verificar si ya hay una sesión activa
+  useEffect(() => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    if (token) {
+      // Si hay token, verificar si es válido intentando obtener el usuario
+      api.get('/api/v1/auth/me')
+        .then(() => {
+          // Si el token es válido, redirigir al dashboard
+          navigate('/admin/dashboard', { replace: true });
+        })
+        .catch(() => {
+          // Si el token no es válido, limpiar localStorage
+          localStorage.removeItem('AUTH_TOKEN');
+          localStorage.removeItem('USER_NAME');
+        });
+    }
+  }, [navigate]);
+
   const handleLogin = async(formData: LoginForm) =>{
     try{
      

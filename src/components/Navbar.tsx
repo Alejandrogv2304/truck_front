@@ -1,29 +1,20 @@
-// import React from 'react'
-// import { useNavigate, Link } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
-// import axios from 'axios';
 import { IoMdLogOut } from "react-icons/io";
 import type { SideBarProps } from './Sidebar';
 import { COLORS } from '../constants/styles';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar({ sidebarToggle, setSidebarToggle }:SideBarProps) {
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-//   const handleLogout = async () => {
-//     try {
-//       const response = await axios.post('http://localhost:4000/auth/logout', {}, {
-//         withCredentials: true // Incluye la cookie HttpOnly
-//       });
-
-//       if (response.status === 200) {
-//         navigate('/'); // Redirige tras logout
-//       } else {
-//         console.error('Error al cerrar sesión:', response);
-//       }
-//     } catch (error) {
-//       console.error('Error en handleLogout:', error);
-//     }
-//   };
+  const handleLogout = () => {
+    // Eliminar el token y el nombre del usuario del localStorage
+    localStorage.removeItem('AUTH_TOKEN');
+    localStorage.removeItem('USER_NAME');
+    
+    // Redirigir al login
+    navigate('/auth/login');
+  };
 
   return (
     <nav className="flex justify-between py-3 px-4 border-b-2 border-gray-200 font-ubuntu">
@@ -41,7 +32,7 @@ export default function Navbar({ sidebarToggle, setSidebarToggle }:SideBarProps)
             <ul className="py-2 text-sm text-gray-950">
               <li className={`${COLORS["hoverdark"]}`}>
                 <button
-                //   onClick={handleLogout}
+                  onClick={handleLogout}
                   className="w-full text-center px-4 "
                 >
                   Cerrar Sesión

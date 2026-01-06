@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import LoginView from "./views/LoginView";
 import RegisterView from "./views/RegisterView";
@@ -23,6 +23,9 @@ function Router() {
     <>
     <BrowserRouter>
     <Routes>
+        {/* Ruta raíz - redirige al login */}
+        <Route path="/" element={<Navigate to="/auth/login" replace />} />
+        
         <Route element={<AuthLayout/>}>
             <Route path="/auth/login" element={<LoginView/>}/>
             <Route path="/auth/register" element={<RegisterView/>}/>
@@ -48,6 +51,9 @@ function Router() {
 
           </Route>
         </Route>
+        
+        {/* Ruta 404 - Cualquier ruta no encontrada */}
+        <Route path="*" element={<Navigate to="/auth/login" replace />} />
     </Routes>
     </BrowserRouter>
     </>
