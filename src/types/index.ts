@@ -93,3 +93,11 @@ export type GastoCamionCardProps={
     placa: string;
     onDelete: (id: number) => void;
 }
+
+export type GastoCamion = {
+    valor: number;
+    tipo_gasto: string;
+    descripcion?: string;
+    fecha: Date;
+    id_camion:number;
+}

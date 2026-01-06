@@ -32,7 +32,7 @@ export default function SideBar({ sidebarToggle, setSidebarToggle }:SideBarProps
       <div className="flex flex-col justify-between h-[calc(100%-80px)]">
       <ul className="text-green-900 font-bold mt-3 ml-2 mr-2">
         <li className={`mb-2 rounded hover:shadow py-2 ${COLORS["hover"]}`}>
-          <Link to="" className="px-3 w-full flex items-center">
+          <Link to="/admin/dashboard" className="px-3 w-full flex items-center">
             <LuHouse className="h-6 w-6 inline-block mr-2 -mt-2" /> Tablero
           </Link>
         </li>

@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../config/axios"
-import type {  Admin, Camion, Conductor, GastoViajeForm, Viaje } from "../types";
+import type {  Admin, Camion, Conductor, GastoCamion, GastoViajeForm, Viaje } from "../types";
 
 
 export async function getAdmin(){
@@ -411,3 +411,25 @@ export async function deleteGastoCamion(id: number){
     }
 }
 
+
+export async function createGastoCamion(formData: GastoCamion){
+    try{
+      const {data} = await api.post(`/api/v1/gastos-camion`, formData);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al crear el gasto del camión')
+      }
+      throw error
+    }
+}
