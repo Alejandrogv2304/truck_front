@@ -26,7 +26,7 @@ const limit = 10;
     staleTime: 1000 * 60 * 5, // Los datos son "frescos" por 5 minutos
   });
 
-  console.log(gastosCamionData);
+  
 
   const gastos = gastosCamionData?.data || [];
   const meta = gastosCamionData?.meta;
