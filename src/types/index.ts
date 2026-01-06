@@ -101,3 +101,18 @@ export type GastoCamion = {
     fecha: Date;
     id_camion:number;
 }
+
+export type EstadisticasGenerales = {
+    total: number;
+    ingresos: number;
+    egresos: number;
+}
+
+export type EstadisticasMes ={
+    mes: string;  // Nombre del mes
+    balance: number;    // Balance (ingresos - gastos)
+}
+
+export type EstadisticasGraficas = {
+    data: EstadisticasMes[];
+}

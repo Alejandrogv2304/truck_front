@@ -433,3 +433,51 @@ export async function createGastoCamion(formData: GastoCamion){
       throw error
     }
 }
+
+
+{/* Datos para las estadisticas del dashboard */}
+
+export async function getEstadisticasGenerales(){
+    try{
+      const {data} = await api.get(`/api/v1/viaje/estadisticas`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al obtener las estadisticas')
+      }
+      throw error
+    }
+}
+
+
+export async function getEstadisticasGraficas(){
+    try{
+      const {data} = await api.get(`/api/v1/viaje/estadisticas/graficas`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al obtener las estadisticas de la gráfica')
+      }
+      throw error
+    }
+}
