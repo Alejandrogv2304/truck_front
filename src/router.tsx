@@ -14,6 +14,7 @@ import AddViajesView from "./views/AddViajesView";
 import DetailsViajeView from "./views/DetailsViajeView";
 import GastosView from "./views/GastosView";
 import AddGastosView from "./views/AddGastosView";
+import InformesView from "./views/InformesView";
 
 function Router() {
   
@@ -42,6 +43,7 @@ function Router() {
             <Route path="/admin/viajes/gastos/:id" element={<DetailsViajeView/>}/>
             <Route path="/admin/gastos" element={<GastosView/>}/>
             <Route path="/admin/gastos/agregar" element={<AddGastosView/>}/>
+            <Route path="/admin/informes" element={<InformesView/>}/>
 
 
           </Route>

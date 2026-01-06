@@ -14,6 +14,8 @@ import { Link } from 'react-router-dom';
 }
 
 export default function SideBar({ sidebarToggle, setSidebarToggle }:SideBarProps) {
+  const userName = localStorage.getItem('USER_NAME') || 'Usuario';
+  
   return (
     <div
       className={`fixed top-0 left-0 h-full w-64  text-black transform ${
@@ -57,16 +59,20 @@ export default function SideBar({ sidebarToggle, setSidebarToggle }:SideBarProps
           </Link>
         </li>
         <li className={`mb-2 rounded hover:shadow py-2 ${COLORS["hover"]}`}>
-          <Link to="" className="px-3 w-full flex items-center">
+          <Link to="/admin/informes" className="px-3 w-full flex items-center">
             <TiDocumentText className="h-6 w-6 inline-block mr-2 -mt-2" /> Informes
           </Link>
         </li>
       </ul>
-      <ul>
-      <li className={`mb-4 rounded hover:shadow py-2 ${COLORS["hover"]}`}>
-        <Link to="" className="px-3 w-full flex items-center">
-          <FaRegUserCircle className="h-6 w-6 inline-block mr-2 -mt-2" /> Perfil
-        </Link>
+      <ul className="ml-2 mr-2">
+      <li className={`mb-4 rounded py-3 px-3 bg-green-100 border-2 border-green-300`}>
+        <div className="flex items-center gap-2">
+          <FaRegUserCircle className="h-8 w-8 text-green-800" />
+          <div>
+            <p className="text-sm font-semibold text-green-900">{userName}</p>
+            <p className="text-xs text-green-700">Administrador</p>
+          </div>
+        </div>
       </li>
     </ul>
       </div>

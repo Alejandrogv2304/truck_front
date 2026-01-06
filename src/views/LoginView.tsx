@@ -18,6 +18,7 @@ export default function LoginView() {
      
       const {data} = await api.post(`/api/v1/auth/login`, formData)
       localStorage.setItem('AUTH_TOKEN', data.access_token)
+      localStorage.setItem('USER_NAME', data.admin.nombres)
 
       navigate('/admin/dashboard')
        

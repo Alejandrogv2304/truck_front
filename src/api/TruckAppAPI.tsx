@@ -481,3 +481,26 @@ export async function getEstadisticasGraficas(){
       throw error
     }
 }
+
+
+export async function getEstadisticasInforme(idCamion:number, mes:number, anio:number){
+    try{
+      const {data} = await api.get(`/api/v1/viaje/estadisticas/informe/${idCamion}/${mes}/${anio}`);
+      return data
+    }catch(error){
+      if(isAxiosError(error) && error.response){
+        const errorMessage = error.response.data.message;
+        
+        if(Array.isArray(errorMessage)){
+          throw new Error(errorMessage[0])
+        }
+        
+        if(typeof errorMessage === 'string'){
+          throw new Error(errorMessage)
+        }
+        
+        throw new Error(error.response.data.error || 'Error al obtener las estadisticas de la gráfica')
+      }
+      throw error
+    }
+}
