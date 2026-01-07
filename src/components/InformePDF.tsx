@@ -148,15 +148,6 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
-// Función para formatear fecha
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
-
 interface InformePDFProps {
   datos: DatosInforme;
 }
