@@ -15,6 +15,13 @@ type DetalleViaje = {
   balance_viaje: number;
 };
 
+type DetalleGastoCamion = {
+  valor: string;
+  tipo_gasto: string;
+  descripcion: string;
+  fecha: string;
+};
+
 type DatosInforme = {
   mes: string;
   anio: number;
@@ -23,6 +30,7 @@ type DatosInforme = {
   egresos_totales: number;
   balance_total: number;
   detalle_viajes: DetalleViaje[];
+  detalle_gastos_camion: DetalleGastoCamion[];
 };
 
 // Estilos del PDF
@@ -223,12 +231,41 @@ export const InformePDF = ({ datos }: InformePDFProps) => (
               <Text style={[styles.tableCell, { flex: 0.6 }]}>{viaje.camion}</Text>
               <Text style={[styles.tableCell, { flex: 0.8 }]}>{viaje.conductor}</Text>
               <Text style={[styles.tableCell, { flex: 0.8 }]}>{formatCurrency(viaje.valor_viaje)}</Text>
-              <Text style={[styles.tableCell, { flex: 0.8 }]}>{formatCurrency(viaje.gastos_viaje + viaje.gastos_camion)}</Text>
+              <Text style={[styles.tableCell, { flex: 0.8 }]}>{formatCurrency(viaje.gastos_viaje )}</Text>
               <Text style={[styles.tableCell, { flex: 0.8 }]}>{formatCurrency(viaje.balance_viaje)}</Text>
             </View>
           ))}
         </View>
       </View>
+
+      {/* Detalle de Gastos de Camión */}
+      {datos.detalle_gastos_camion && datos.detalle_gastos_camion.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Gastos de Camión</Text>
+          
+          <View style={styles.table}>
+            {/* Header de la tabla */}
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableCellHeader, { flex: 0.7 }]}>Fecha</Text>
+              <Text style={[styles.tableCellHeader, { flex: 1 }]}>Tipo de Gasto</Text>
+              <Text style={[styles.tableCellHeader, { flex: 2 }]}>Descripción</Text>
+              <Text style={[styles.tableCellHeader, { flex: 0.9 }]}>Valor</Text>
+            </View>
+
+            {/* Filas de datos */}
+            {datos.detalle_gastos_camion.map((gasto, index) => (
+              <View key={index} style={index % 2 === 0 ? styles.tableRow : styles.tableRowAlt}>
+                <Text style={[styles.tableCell, { flex: 0.7 }]}>
+                  {new Date(gasto.fecha).toLocaleDateString('es-CO')}
+                </Text>
+                <Text style={[styles.tableCell, { flex: 1 }]}>{gasto.tipo_gasto}</Text>
+                <Text style={[styles.tableCell, { flex: 2 }]}>{gasto.descripcion}</Text>
+                <Text style={[styles.tableCell, { flex: 0.9 }]}>{formatCurrency(parseFloat(gasto.valor))}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
 
       {/* Footer */}
       <View style={styles.footer}>
