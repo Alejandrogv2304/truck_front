@@ -5,9 +5,11 @@ import { isAxiosError } from "axios";
 import { toast } from "sonner";
 import api from "../config/axios";
 import ErrorMessage from "../components/ErrorMessage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginView() {
+    const [visible, setVisible] = useState(false);
     const navigate = useNavigate(); 
   const initialValues: LoginForm = {
     correo: '',
@@ -78,20 +80,28 @@ export default function LoginView() {
       </div>
       <div className="grid grid-cols-1 space-y-3">
         <label htmlFor="password" className="text-lg font-semibold text-green-800 pl-3">Password</label>
+        <div className="flex justify-between bg-white  rounded-lg pr-2 p-2">
         <input  id="password"
-            type="password"
+            type={visible ? "text" : "password"}
             placeholder="*******"
-            className="bg-white border-none p-2 rounded-lg placeholder-slate-400 ml-2"
+            className="flex-1 bg-transparent border-none outline-none placeholder-slate-400"
             {...register("password", {
                 required: "El Password es obligatorio",
             })}
+            />
+              <button
+              type="button"
+              onClick={() => setVisible(!visible)}
+              className="text-gray-500 hover:text-gray-700"
             >
-
-            </input>
+              {visible ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+           </div>
+           
             {errors.password && (
             <ErrorMessage>{errors.password.message}</ErrorMessage>
         )}
-      </div>
+      </div> 
 
        <input
         type="submit"
