@@ -22,6 +22,11 @@ type DetalleGastoCamion = {
   fecha: string;
 };
 
+type DetalleGastoAgrupado = {
+  tipo_gasto: string;
+  valor: number;
+};
+
 type DatosInforme = {
   mes: string;
   anio: number;
@@ -31,6 +36,7 @@ type DatosInforme = {
   balance_total: number;
   detalle_viajes: DetalleViaje[];
   detalle_gastos_camion: DetalleGastoCamion[];
+  detalle_gastos_agrupados: DetalleGastoAgrupado[];
 };
 
 // Estilos del PDF
@@ -237,6 +243,29 @@ export const InformePDF = ({ datos }: InformePDFProps) => (
           ))}
         </View>
       </View>
+
+      {/* Gastos Agrupados por Tipo */}
+      {datos.detalle_gastos_agrupados && datos.detalle_gastos_agrupados.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Gastos Agrupados por Tipo</Text>
+          
+          <View style={styles.table}>
+            {/* Header de la tabla */}
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableCellHeader, { flex: 2 }]}>Tipo de Gasto</Text>
+              <Text style={[styles.tableCellHeader, { flex: 1 }]}>Valor Total</Text>
+            </View>
+
+            {/* Filas de datos */}
+            {datos.detalle_gastos_agrupados.map((gasto, index) => (
+              <View key={index} style={index % 2 === 0 ? styles.tableRow : styles.tableRowAlt}>
+                <Text style={[styles.tableCell, { flex: 2 }]}>{gasto.tipo_gasto}</Text>
+                <Text style={[styles.tableCell, { flex: 1 }]}>{formatCurrency(gasto.valor)}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
 
       {/* Detalle de Gastos de Camión */}
       {datos.detalle_gastos_camion && datos.detalle_gastos_camion.length > 0 && (

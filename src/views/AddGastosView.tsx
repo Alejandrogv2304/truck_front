@@ -178,6 +178,8 @@ export default function AddGastosView() {
                      <option value="llantas">Llantas</option>
                      <option value="seguros">Seguros</option>
                      <option value="bateria">Batería</option>
+                     <option value="nomina">Nomina</option>
+                     <option value="lavadas">Lavadas</option>
 
                      <option value="otro">Otros</option>
                      
