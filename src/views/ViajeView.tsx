@@ -3,7 +3,7 @@ import { COLORS } from "../constants/styles";
 import Modal from "../components/Modal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { deleteViaje, getAllViajes } from "../api/TruckAppAPI";
+import { deleteViaje, getAllCamionPlacaAndId, getAllViajes } from "../api/TruckAppAPI";
 import { toast } from "sonner";
 import type { ViajeCardProps } from "../types";
 import ViajesCard from "../components/ViajeCard";
@@ -14,17 +14,30 @@ export default function ViajeView() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedViajeId, setSelectedViajeId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPlaca, setSelectedPlaca] = useState<string>("");
+  
   const limit = 10;
+
+  // Query para obtener los camiones 
+    const { data: camionesData } = useQuery({
+      queryKey: ['camionesPlaca'],
+      queryFn: () => getAllCamionPlacaAndId(),
+      enabled: true,
+    });
 
   // Query para obtener todos los viajes
   const { data: viajesResponse, isLoading, isError } = useQuery({
-    queryKey: ['viajes', currentPage],
-    queryFn: () => getAllViajes(currentPage, limit),
+    queryKey: ['viajes', currentPage,selectedPlaca],
+    queryFn: () =>{
+      const camionSeleccionado = camionesData?.find((c: any) => c.placa === selectedPlaca);
+      const idCamion = camionSeleccionado?.id_camion || 0;
+      return getAllViajes(currentPage, limit, idCamion)},
     refetchOnWindowFocus: false, 
-    staleTime: 1000 * 60 * 5, // Los datos son "frescos" por 5 minutos
+    staleTime: 1000 * 60 * 5,
+     // Los datos son "frescos" por 5 minutos
   });
 
-  console.log(viajesResponse);
+  // console.log(viajesResponse);
   
   const viajes = viajesResponse?.data || [];
   const meta = viajesResponse?.meta;
@@ -59,6 +72,10 @@ export default function ViajeView() {
     navigate(`/admin/viajes/editar/${id}`);
   };
 
+   
+
+  
+
   return (
      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-10">
 
@@ -90,8 +107,40 @@ export default function ViajeView() {
               </Link>
             </button>
             </div>
-          
-            
+
+            {/* Filtros para viajes */}
+                    <div className="rounded-lg shadow-md w-full border-2 border-slate-200 p-6 mb-6">
+                      <div className="mb-4">
+                        <h1 className="text-xl text-green-900">Filtros para tús viajes</h1>
+                      </div>
+                      
+                        <form  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                       <div className="space-y-3 space-x-4">
+                                          <label
+                                            htmlFor="idCamion"
+                                            className="text-lg font-semibold text-green-800 pl-3 mr-4"
+                                          >
+                                            Camion
+                                          </label>
+                                          <select
+                                            id="placa"
+                                            value={selectedPlaca}
+                                            onChange={(e) => setSelectedPlaca(e.target.value)}
+                                            className={`border-2 p-2 rounded-lg text-slate-600 w-xs bg-white border-slate-200`}
+                                          >
+                                            <option value="">Todos los camiones</option>
+                                            {camionesData?.map((camion: {id_camion: number, placa: string}) => (
+                                              <option key={camion.id_camion} value={camion.placa}>{camion.placa} </option>
+                                            ))}
+                                           
+                                          </select>
+                                         
+                                        </div>
+                                
+                       
+                      </form>
+                      
+                    </div>
 
              {/* Loading State */}
                   {isLoading && (
@@ -169,8 +218,6 @@ export default function ViajeView() {
                       )}
                     </>
                   )}
-                </div>
-              
-
-  )
+        </div>
+  );
 }

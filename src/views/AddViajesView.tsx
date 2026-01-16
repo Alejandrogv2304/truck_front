@@ -40,27 +40,23 @@ export default function AddViajesView() {
       enabled: isEditMode, // Solo ejecuta si hay un id
     });
     
-
     // Query para obtener los conductores 
     const { data: conductorData } = useQuery({
-      queryKey: ['conductornombre', id],
+      queryKey: ['conductornombre'],
       queryFn: () => getAllConductoresNameAndId(),
       enabled: true,
     });
 
-   
-
     // Query para obtener los camiones 
     const { data: camionesData } = useQuery({
-      queryKey: ['camionesPlaca', id],
+      queryKey: ['camionesPlaca'],
       queryFn: () => getAllCamionPlacaAndId(),
       enabled: true,
     });
 
-
     // Cargar datos en el formulario cuando se obtienen
     useEffect(() => {
-      if (viajeData && camionesData && conductorData) {
+      if (isEditMode && viajeData && camionesData && conductorData) {
         // Buscar el ID del camión por placa
         const camionEncontrado = camionesData.find(
           (c: {id_camion: number, placa: string}) => c.placa === viajeData.camion
@@ -88,7 +84,7 @@ export default function AddViajesView() {
          estado: viajeData.estado || '',
         });
       }
-    }, [viajeData, camionesData, conductorData, reset]);
+    }, [viajeData, camionesData, conductorData, reset, isEditMode]);
 
     // Mutation para crear
     const createMutation = useMutation({

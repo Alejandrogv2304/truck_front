@@ -210,7 +210,7 @@ export async function getAllConductoresNameAndId(){
 //Funciones relacionadas con los viajes
 export async function getViajeById(id: number){
     try{
-      const {data} = await api.get(`/api/v1/viaje/${id}`);
+      const {data} = await api.get(`/api/v1/viaje/detalle/${id}`);
       return data
     }catch(error){
       if(isAxiosError(error) && error.response){
@@ -246,9 +246,9 @@ export async function createViaje(formData: Viaje){
 }
 
 
-export async function getAllViajes(page: number = 1, limit: number = 20){
+export async function getAllViajes(page: number = 1, limit: number = 20, idCamion:number){
     try{
-      const {data} = await api.get('/api/v1/viaje', {
+      const {data} = await api.get(`/api/v1/viaje/${idCamion}`, {
         params: { page, limit }
       });
       return data
