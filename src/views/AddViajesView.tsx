@@ -115,7 +115,7 @@ export default function AddViajesView() {
     });
 
     const handleAddViaje = (formData: Viaje) => {
-      console.log('Datos del formulario antes de transformar:', formData);
+      
       
       // Transformar los datos para asegurar que sean números enteros válidos
       const idCamion = parseInt(String(formData.idCamion), 10);
@@ -162,7 +162,7 @@ export default function AddViajesView() {
           estado: formData.estado,
         };
         
-        
+      
         createMutation.mutate(dataToSend);
       }
     };

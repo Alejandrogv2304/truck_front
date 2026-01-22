@@ -37,10 +37,13 @@ export default function ViajeView() {
      // Los datos son "frescos" por 5 minutos
   });
 
-  // console.log(viajesResponse);
+ 
+ 
   
   const viajes = viajesResponse?.data || [];
   const meta = viajesResponse?.meta;
+
+   
   // Mutation para eliminar viaje
   const { mutate: deleteViajeMutation } = useMutation({
     mutationFn: deleteViaje,
@@ -189,9 +192,9 @@ export default function ViajeView() {
                         <div className="flex items-center justify-center gap-2 mt-8">
                           <button
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                            disabled={!meta.hasPrevPage}
+                            disabled={!meta.hasPreviousPage}
                             className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                              meta.hasPrevPage
+                              meta.hasPreviousPage
                                 ? `${COLORS["dark_secundary"]} ${COLORS["hover"]} text-white`
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}

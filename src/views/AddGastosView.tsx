@@ -75,6 +75,7 @@ export default function AddGastosView() {
           id_camion: formData.id_camion,
         }
         
+        
         createMutation.mutate(dataToSend);
       
     };
