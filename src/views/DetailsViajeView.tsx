@@ -228,6 +228,7 @@ export default function DetailsViajeView() {
                   <option value="peajes">Peajes</option>
                   <option value="viaticos">Viaticos</option>
                   <option value="lavadas">Lavadas</option>
+                  <option value="parqueadero">Parqueadero</option>
                   <option value="otro">Otros</option>
                 </select>
               </div>

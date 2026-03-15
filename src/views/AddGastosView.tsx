@@ -182,6 +182,7 @@ export default function AddGastosView() {
                      <option value="nomina">Nomina</option>
                      <option value="lavadas">Lavadas</option>
                      <option value="peajes">Peajes</option>
+                     <option value="parqueadero">Parqueadero</option>
 
                      <option value="otro">Otros</option>
                      
