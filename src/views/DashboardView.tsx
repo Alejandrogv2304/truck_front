@@ -4,6 +4,26 @@ import { getEstadisticasGenerales, getEstadisticasGraficas } from "../api/TruckA
 import type { EstadisticasGenerales, EstadisticasGraficas } from "../types";
 import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
+const formatCOP = (value: number) => new Intl.NumberFormat('es-CO', {
+  style: 'currency',
+  currency: 'COP',
+}).format(value);
+
+const parseCOP = (value: string | number) => {
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  const normalized = value
+    .replace(/\s/g, '')
+    .replace(/[^\d,-]/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.');
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
 export default function DashboardView() {
 
   const { data: estadisticasGraficas } = useQuery<EstadisticasGraficas>({
@@ -17,6 +37,11 @@ export default function DashboardView() {
       queryFn: () => getEstadisticasGenerales(),
       enabled: true,
     });
+
+    const graficaData = (estadisticasGraficas?.data || []).map((item) => ({
+      ...item,
+      balance: parseCOP(item.balance),
+    }));
 
     console.log('Estadísticas Generales:', estadisticasGenerales);
 
@@ -52,7 +77,7 @@ export default function DashboardView() {
               <FaMoneyBillAlt className="text-2xl text-green-900" />
             </div>
             
-            <span className="font-bold text-3xl text-green-900">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(estadisticasGenerales?.ingresos || 0)}</span>
+            <span className="font-bold text-2xl text-green-900">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(estadisticasGenerales?.ingresos || 0)}</span>
           </div>
         </div>
         <div className="shadow-sm rounded-lg p-6 bg-white border-2 border-slate-200">
@@ -62,7 +87,7 @@ export default function DashboardView() {
               <FaMoneyBillAlt className="text-2xl text-red-800" />
             </div>
             
-            <span className="font-bold text-3xl text-red-800">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(estadisticasGenerales?.egresos || 0)}</span>
+            <span className="font-bold text-2xl text-red-800">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(estadisticasGenerales?.egresos || 0)}</span>
           </div>
         </div>
         
@@ -75,7 +100,7 @@ export default function DashboardView() {
         <ComposedChart
       style={{ width: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
       responsive
-      data={estadisticasGraficas?.data || []}
+      data={graficaData}
       margin={{
         top: 20,
         right: 0,
@@ -85,8 +110,8 @@ export default function DashboardView() {
     >
       <CartesianGrid stroke="#f5f5f5" />
       <XAxis dataKey="mes" scale="band" />
-      <YAxis width="auto" />
-      <Tooltip />
+      <YAxis width={90} tickFormatter={(value) => formatCOP(Number(value))} />
+      <Tooltip formatter={(value) => formatCOP(Number(value))} />
       <Legend />
       <Bar dataKey="balance" barSize={20} fill="#01b09e" />
       <Line type="monotone" dataKey="balance" stroke="#ff7300" />
